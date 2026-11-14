@@ -1,4 +1,4 @@
-IF OBJECT_ID(N'[__EFMigrationsHistory]') IS NULL
+﻿IF OBJECT_ID(N'[__EFMigrationsHistory]') IS NULL
 BEGIN
     CREATE TABLE [__EFMigrationsHistory] (
         [MigrationId] nvarchar(150) NOT NULL,
@@ -331,7 +331,7 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20261114135358_InitialCreate', N'10.0.15');
+    VALUES (N'20261114135358_InitialCreate', N'8.0.34');
 END;
 
 COMMIT;

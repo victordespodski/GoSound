@@ -1,0 +1,11 @@
+  Determining projects to restore...
+  Restored /workspace/scratch/69c3362324a5/GoSound_Stage1/GoSound/GoSound.csproj (in 13.05 sec).
+  GoSound -> /workspace/scratch/69c3362324a5/GoSound_Stage1/GoSound/bin/Release/net8.0/GoSound.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:19.94
+
+Build target: net8.0; SDK used for compilation: 10.0.100. Database not re-tested in this compatibility update.

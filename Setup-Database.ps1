@@ -1,7 +1,7 @@
 $ErrorActionPreference = 'Stop'
 Push-Location $PSScriptRoot
 try {
-    dotnet restore GoSound.slnx
+    dotnet restore GoSound.sln
     if ($LASTEXITCODE -ne 0) { throw 'Restore failed.' }
     dotnet tool restore
     if ($LASTEXITCODE -ne 0) { throw 'Tool restore failed.' }
