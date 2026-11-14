@@ -3,6 +3,7 @@ from urllib.request import urlopen
 from urllib.error import HTTPError, URLError
 from pathlib import Path
 import time
+from html import unescape
 base='http://127.0.0.1:5180'
 for attempt in range(30):
     try:
@@ -16,7 +17,7 @@ def check(path, expected_status, expected_text):
         with urlopen(base+path,timeout=20) as r: status,html=r.status,r.read().decode()
     except HTTPError as e: status,html=e.code,e.read().decode()
     assert status==expected_status,(path,status)
-    assert expected_text in html,(path,'missing expected text')
+    assert expected_text in unescape(html),(path,'missing expected text')
     results.append(f'PASS {path} -> {status}')
     Path('verification-results.txt').write_text('\n'.join(results)+'\n')
 check('/',200,'GoSound')
