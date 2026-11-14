@@ -1,0 +1,6 @@
+@model CatalogViewModel
+@{ ViewData["Title"] = "Открий"; }
+<p class="eyebrow">ОТКРИЙ НЕЩО НОВО</p><h1>Предавания за любопитни хора.</h1>
+<form method="get" class="filters"><label>Търсене<input name="search" value="@Model.Search" maxlength="120" placeholder="Заглавие на предаване"/></label><label>Категория<select name="categoryId"><option value="">Всички категории</option>@foreach(var category in Model.Categories){<option value="@category.Id" selected="@(Model.CategoryId == category.Id)">@category.Name</option>}</select></label><button type="submit">Търси</button></form>
+@if(Model.Podcasts.Count == 0){<div class="panel"><h2>Все още няма публикувани предавания.</h2><p>Категориите са готови. Публикуването на съдържание ще бъде добавено в следващия етап.</p></div>}
+<div class="grid">@foreach(var podcast in Model.Podcasts){<article class="panel"><div class="mini-cover" aria-hidden="true">GoSound</div><p class="eyebrow">@podcast.Category.Name</p><h2><a asp-action="Details" asp-route-id="@podcast.Id">@podcast.Title</a></h2><p>@podcast.Owner.DisplayName</p><p>@podcast.Description</p></article>}</div>

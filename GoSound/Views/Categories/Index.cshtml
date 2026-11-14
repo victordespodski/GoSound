@@ -1,0 +1,3 @@
+@model IReadOnlyList<Category>
+@{ ViewData["Title"] = "Категории"; }
+<p class="eyebrow">ИЗБЕРИ ПОСОКА</p><h1>Какво ти е интересно?</h1><div class="grid">@foreach(var category in Model){<a class="panel category" asp-controller="Podcasts" asp-action="Index" asp-route-categoryId="@category.Id"><h2>@category.Name</h2><span>Разгледай предавания →</span></a>}</div>

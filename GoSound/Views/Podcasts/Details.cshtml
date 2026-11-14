@@ -1,0 +1,5 @@
+@model Podcast
+@{ ViewData["Title"] = Model.Title; }
+<p class="eyebrow">@Model.Category.Name</p><h1>@Model.Title</h1><p class="lead">@Model.Description</p><p>Автор: @Model.Owner.DisplayName</p><h2>Епизоди</h2>
+@if(Model.Episodes.Count==0){<p>Все още няма публикувани епизоди.</p>}
+@foreach(var episode in Model.Episodes){<article class="panel"><h3>@episode.Title</h3><p>@episode.Description</p><p>Аудио възпроизвеждането предстои в следващ етап.</p></article>}

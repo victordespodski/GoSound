@@ -426,3 +426,16 @@ FodyWeavers.xsd
 
 # Official VS Code C# Dev Kit Extension exclusion
 #*.lscache
+
+# GoSound local settings
+**/bin/
+**/obj/
+.vs/
+*.user
+*.suo
+.env
+.env.*
+!.env.example
+**/appsettings.Local.json
+**/appsettings.Development.json
+TestResults/

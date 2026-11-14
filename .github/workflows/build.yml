@@ -1,0 +1,46 @@
+name: Stage 1 build and SQL Server smoke checks
+on: [push, pull_request]
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - run: dotnet restore GoSound.slnx
+      - run: dotnet build GoSound.slnx --no-restore --configuration Release
+      - run: dotnet tool restore
+      - name: Start temporary SQL Server and create schema
+        shell: bash
+        run: |
+          set -euo pipefail
+          password="Gs!$(openssl rand -hex 18)Aa1"
+          echo "::add-mask::$password"
+          connection="Server=localhost,1433;Database=GoSound;User Id=sa;Password=$password;Encrypt=True;TrustServerCertificate=True"
+          echo "::add-mask::$connection"
+          echo "ConnectionStrings__DefaultConnection=$connection" >> "$GITHUB_ENV"
+          docker run -d --name gosound-sql -e ACCEPT_EULA=Y -e MSSQL_SA_PASSWORD="$password" -p 1433:1433 mcr.microsoft.com/mssql/server:2022-latest
+          export ConnectionStrings__DefaultConnection="$connection"
+          ready=0
+          for attempt in $(seq 1 20); do
+            if dotnet ef database update --project GoSound/GoSound.csproj --configuration Release --no-build; then ready=1; break; fi
+            sleep 3
+          done
+          test "$ready" = 1
+      - name: Check app against SQL Server
+        shell: bash
+        run: |
+          set -euo pipefail
+          dotnet run --project GoSound/GoSound.csproj --configuration Release --no-build --no-launch-profile --urls http://127.0.0.1:5180 > /tmp/gosound-web.log 2>&1 &
+          app_pid=$!
+          trap 'kill "$app_pid" 2>/dev/null || true' EXIT
+          python3 scripts/smoke.py
+      - name: Upload verification log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage1-smoke-results
+          path: verification-results.txt
+          if-no-files-found: ignore
